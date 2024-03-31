@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="wheather.css">
+    <title>wheather app</title>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="search">
+            <input type="text" placeholder="enter city name" spellchecke="false">
+            <!--search button symbol below-->
+            <button><img src="search-interface-symbol.png" style="height:30px;width:90%;"></button>
+
+        </div>
+        <div class="error">
+            <p>invalid city name</p>
+        </div>
+
+        <div class="wheather">
+            <!--sunlight image -->
+            <img src="cloudy.png" class="wheather-icon">
+            <h1 class="temp">22 ℃</h1>
+            <h2 class="city">New York</h2><!--querry selector-->
+            <div class="details">
+                <div class="col">
+                    <!---->
+                    <img src="water-drop.png">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>humidity</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="https://cdn-icons-png.flaticon.com/512/6015/6015171.png">
+                    <div>
+                        <p class="wind">15kp/h</p>
+                        <p> wind speed</p>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        const apikey = "3afabd402816c1a8a8fdc75728bde742 ";//3afabd402816c1a8a8fdc75728bde742  this my apikey
+        const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q= ";  //lat={lat}&lon={lon}&appid={API key}
+        //take search btn id
+        const searchbox = document.querySelector(".search input");
+        const searchbtn = document.querySelector(".search button");
+        const weatherIcon = document.querySelector(".wheather-icon");
+
+        //function of api data
+        async function checkwheather(city) {
+            const response = await fetch(apiurl + city + `&appid=${apikey}`);  //join the apikey and apiurl  fetch
+            if (response.status == 404) {
+                document.querySelector(".error").style.display = "block";
+                document.querySelector(".wheather").style.display = "none"
+            } else {
+                var data = await response.json();  //covert api data into json format
+                
+
+                document.querySelector(".city").innerHTML = data.name;  //name of the city is updated in html previous duplicate name
+                document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "℃";
+                document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+                document.querySelector(".wind").innerHTML = data.wind.speed + "15kp/h";
+
+
+                if (data.wheather[0].main == "Clauds") {
+                    weatherIcon.src = "cloudy (1).png";
+                }
+                else if (data.wheather[0].main == "Clear") {
+                    wheatherIcon.src = "sun.png";
+
+                } else if (data.wheather[0].main == "Rain") {
+                    wheatherIcon.src = "cloudy (2).png";
+
+                } else if (data.wheather[0].main == "Drizzle") {
+                    wheatherIcon.src = "weather-app.png";
+
+                } else if (data.wheather[0].main == "Mist") {
+                    wheatherIcon.src = "storm.png";
+
+                }
+                   document.querySelector(".wheather").style.display = "block"
+                   document.querySelector(".error").style.display = "none";
+            }
+
+
+
+
+            }
+           
+        
+
+
+
+        //click after the search button find city  detailes
+        searchbtn.addEventListener("click", () => {
+            checkwheather(searchbox.value);  //insert input value into the   //call above fuction afetr click the search city button
+
+        })
+
+
+    </script>
+</body>
+
+</html>
